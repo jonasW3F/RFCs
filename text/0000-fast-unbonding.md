@@ -46,7 +46,7 @@ back_of_unbonding_queue_block_number = max(current_block_number, back_of_unbondi
 This determines at which block the user has their tokens unbonded, making sure that it is in the limit of a minimum of 2 days and a maximum of 28 days.
 
 ```
-unbonding_block_number = min(403200, max(back_of_unbonding_queue_block_number, 28800))
+unbonding_block_number = min(403200, max(back_of_unbonding_queue_block_number, 28800)) + current_block_number
 ```
 
 Ultimately, the user's token are unbonded at `unbonding_block_number`.
