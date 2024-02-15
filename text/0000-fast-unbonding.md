@@ -27,6 +27,8 @@ In short, we want to implement a mechanism that makes sure that the Relay Chain 
 
 ### Mechanism
 
+# TODO: We should include a mechanism that fills up to the maximum stake. and splits it into pieces. Let's say we have 3000 capacity left before hitting the max unstake, then if you want to unbond 5000 you should do it with 3000 and 2000 instead of 5000. The question is whether we want to solve it or just say its bad luck.
+
 When a user decides to unbond their tokens, they don't become instantly available. Instead, they enter an "unbonding queue." The following specification illustrates how the queue works, given a user wants to unbond some portion of their stake denoted as `Unbonding Stake`. We also store a variable, `max_unstake` that tracks how much stake we want to let unbonded potentially earlier than 28 days.
 
 At any time we store `back_of_unbonding_queue_block_number` which expresses when all the existing unbonders have unbonded. Note, that 28 days are 403200 blocks and 2 days are 28800 blocks. 
@@ -46,7 +48,7 @@ back_of_unbonding_queue_block_number = max(current_block_number, back_of_unbondi
 This determines at which block the user has their tokens unbonded, making sure that it is in the limit of a minimum of 2 days and a maximum of 28 days.
 
 ```
-unbonding_block_number = min(403200, max(back_of_unbonding_queue_block_number, 28800)) + current_block_number
+unbonding_block_number = min(403200, max(back_of_unbonding_queue_block_number - current_block_number, 28800)) + current_block_number
 ```
 
 Ultimately, the user's token are unbonded at `unbonding_block_number`.
@@ -71,6 +73,8 @@ There are a few small design considerations that are open for discussion:
 
 ### UI
 Having two types of queues makes the decision for users more complex. UIs should provide information to a user unbonding such as "Do you like to join the queue and unbond in 10 days (latest) or pay X% of your unbonding token to exit in 2 days?
+
+Due to the nature of the unbonding queue, dividing the total unbond into smaller unbonds would decrease the expected average unbonding time for a nominator. The trade-off will be that it requires more extrinsics and at some point it is not efficient to split further. We leave it UIs to figure out user interfaces that educates and allows nominators to decide how to split their unbonds.
 
 ---
 
