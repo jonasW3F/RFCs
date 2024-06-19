@@ -96,7 +96,7 @@ We can use the proposed unbonding queue calculation, with the recommended parame
 
 The following graph plots said statistics.
 
-![Unbonding_queue](/.empirical_analysis.png)
+![Description of the image](./empirical_analysis.png)
 
 The abovementioned graph combines two metrics into a single graph. 
 - `Unbonded Amount`: The number of daily and newly unbonded token over time scaled to the y-axis of 28 days. In particular its normalized by `daily_unbonded / max(daily_unbonded) * 28`.
